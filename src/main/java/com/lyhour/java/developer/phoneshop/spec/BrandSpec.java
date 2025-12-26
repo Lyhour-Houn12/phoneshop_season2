@@ -19,10 +19,10 @@ public class BrandSpec implements Specification<Brand>{
 	
 	private final BrandFilter brandFilter;
 	
-	List<Predicate> predicates = new ArrayList<>();
 	
 	@Override
 	public Predicate toPredicate(Root<Brand> brand, CriteriaQuery<?> query, CriteriaBuilder cb) {
+		List<Predicate> predicates = new ArrayList<>();
 		if(brandFilter.getName() != null) {
 			Predicate name = cb.like(cb.upper(brand.get("name")), "%"+ brandFilter.getName().toUpperCase() +"%");
 			predicates.add(name);

@@ -2,7 +2,6 @@ package com.lyhour.java.developer.phoneshop.controller;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +16,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lyhour.java.developer.phoneshop.dto.BrandDTO;
+import com.lyhour.java.developer.phoneshop.dto.BrandWithModelDTOs;
+import com.lyhour.java.developer.phoneshop.dto.ModelDTO;
 import com.lyhour.java.developer.phoneshop.dto.PageDTO;
 import com.lyhour.java.developer.phoneshop.entity.Brand;
+import com.lyhour.java.developer.phoneshop.entity.Model;
 import com.lyhour.java.developer.phoneshop.mapper.BrandMapper;
+import com.lyhour.java.developer.phoneshop.mapper.ModelMapper;
 import com.lyhour.java.developer.phoneshop.service.BrandService;
 
 import lombok.RequiredArgsConstructor;
@@ -28,7 +31,6 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 public class BrandController {
-	
 	private final BrandService brandService;
 	
 	@PostMapping
@@ -54,11 +56,11 @@ public class BrandController {
 		brandService.deleteById(id);
 		return ResponseEntity.ok(messageDelete);
 	}
-//	@GetMapping(params = {"page", "size"})
-//	public ResponseEntity<?> pageBrands(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size){
-//		return ResponseEntity.ok(brandService.pageBrand(page, size));
-//		
-//	}
+	@GetMapping("{id}/models")
+	public ResponseEntity<?> getModelBelongBrand(@PathVariable Long id){
+		BrandWithModelDTOs brand = brandService.getBrand(id);
+		return ResponseEntity.ok(brand);
+	}
 	@GetMapping
 	public ResponseEntity<?> getBrands(@RequestParam Map<String, String> params){
 		Page<Brand> pages = brandService.getBrands(params);
