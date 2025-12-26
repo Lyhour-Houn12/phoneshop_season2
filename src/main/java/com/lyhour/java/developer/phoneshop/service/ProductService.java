@@ -15,6 +15,6 @@ public interface ProductService {
 	void productImport(ProductImportDTO importDTO);
 	void setSalePrice(Long productId, BigDecimal setPrice);
 	void importProductByExcel(MultipartFile multipartFile);
-	Product findByModelIdAndColorId(Long modelId, Long colorId);
+	Product getfindByModelIdAndColorId(Long modelId, Long colorId);
 
 }

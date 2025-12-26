@@ -79,6 +79,8 @@ public class ProductServiceImpl implements ProductService{
 			if (rowIterator.hasNext()) rowIterator.next();
 			while(rowIterator.hasNext()) {
 				Row row = rowIterator.next();
+				// Check if the cell is actually numeric before getting value
+			    if (row.getCell(0) == null || row.getCell(1) == null) continue;
 				
 				Cell cellModelId = row.getCell(0);
 				Long modelId =(long) cellModelId.getNumericCellValue();
@@ -91,8 +93,10 @@ public class ProductServiceImpl implements ProductService{
 				Cell cellImportDate = row.getCell(4);
 				LocalDateTime importDate = cellImportDate.getLocalDateTimeCellValue();
 				
+				
+				System.out.println("Looking for product - ModelId: " + modelId + " (type: " + modelId.getClass() + "), ColorId: " + colorId + " (type: " + colorId.getClass() + ")");
 				// validate and save to product
-				Product product = findByModelIdAndColorId(modelId, colorId);
+				Product product = getfindByModelIdAndColorId(modelId, colorId);
 				Integer availableUnit = 0;
 				if(product.getUnit() != null) {
 					availableUnit = product.getUnit();
@@ -118,9 +122,9 @@ public class ProductServiceImpl implements ProductService{
 		
 	}
 	@Override
-	public Product findByModelIdAndColorId(Long modelId, Long colorId) {
+	public Product getfindByModelIdAndColorId(Long modelId, Long colorId) {
 		String text = String.format("Product with Model id = %d and Color id = %d not found", modelId, colorId);
-		return productRepository.findByModelIdAndColorId(modelId, colorId)
+		return productRepository.findByModel_IdAndColor_Id(modelId, colorId)
 					.orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, text));
 	}
 

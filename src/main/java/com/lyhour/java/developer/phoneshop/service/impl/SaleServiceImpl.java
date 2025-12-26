@@ -39,14 +39,18 @@ public class SaleServiceImpl implements SaleService {
 		List<Product> products = productRepository.findAllById(productIds);  // to get all product from id
 		Map<Long, Product> productMap = products.stream()  // convert it to map
 				.collect(Collectors.toMap(Product::getId, Function.identity()));
-		// validate stock
+		// validate stock and price
 		saleDTO.getProductSold().stream().forEach(ps -> {
 			Product product = productMap.get(ps.getProductId());
 			if (product.getUnit() < ps.getNumberOfUnit()) {
 				throw new ApiException(HttpStatus.BAD_REQUEST,
 						String.format("Product [%s] is not enough in stock", product.getName()));
 			}
+			if(product.getPricePerUnit() == null) {
+				throw new ApiException(HttpStatus.BAD_REQUEST, String.format("Product [%s] is not available price yet", product.getName()));
+			}
 		});
+		
 		// save sale
 		Sale sale = new Sale();
 		sale.setDateTime(saleDTO.getDateTime());
@@ -95,6 +99,8 @@ public class SaleServiceImpl implements SaleService {
 		return saleRepository.findById(saleId)
 			.orElseThrow(() -> new ResourceFoundOrNot("Sale", saleId));
 	}
+
+	
 	
 	
 	

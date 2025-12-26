@@ -24,8 +24,6 @@ public class Product {
 	private Long id;
 	@Column(name = "product_name")
 	private String name;
-	@NotNull
-	@Column(nullable = false)
 	private String image;
 	@Column(name = "product_unit")
 	private Integer unit;
